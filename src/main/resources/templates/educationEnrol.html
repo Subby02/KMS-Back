@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>교육 등록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        .form-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .form-column {
+            flex: 1;
+            min-width: 400px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        button {
+            margin-top: 30px;
+            padding: 12px 18px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>교육 등록</h1>
+<form id="educationForm">
+    <div class="form-container">
+        <div class="form-column">
+            <label for="eduType" class="required">교육 유형</label>
+            <select id="eduType" name="eduType" required>
+                <option value="오프라인" selected>오프라인</option>
+                <option value="온라인">온라인</option>
+            </select>
+
+            <label for="eduName" class="required">교육 이름</label>
+            <input type="text" id="eduName" name="eduName" maxlength="20" required>
+
+            <label for="eduDescription" class="required">교육 설명</label>
+            <textarea id="eduDescription" name="eduDescription" maxlength="300" required></textarea>
+
+            <label for="eduLocation" class="required">교육 장소</label>
+            <input type="text" id="eduLocation" name="eduLocation" maxlength="50" required>
+
+            <label for="maxApplicant" class="required">교육 최대 인원</label>
+            <input type="number" id="maxApplicant" name="maxApplicant" required>
+
+            <label for="applyStartDate" class="required">신청 시작 날짜</label>
+            <input type="date" id="applyStartDate" name="applyStartDate" required>
+
+            <label for="applyEndDate" class="required">신청 마감 날짜</label>
+            <input type="date" id="applyEndDate" name="applyEndDate" required>
+        </div>
+
+        <div class="form-column">
+            <label for="eduStartDate" class="required">교육 시작 날짜</label>
+            <input type="date" id="eduStartDate" name="eduStartDate" required>
+
+            <label for="eduEndDate" class="required">교육 마감 날짜</label>
+            <input type="date" id="eduEndDate" name="eduEndDate" required>
+
+            <label for="educatorName" class="required">교육 담당자 이름</label>
+            <input type="text" id="educatorName" name="educatorName" maxlength="5" required>
+
+            <label for="educatorContact" class="required">교육 담당자 연락처</label>
+            <input type="text" id="educatorContact" name="educatorContact" maxlength="13" required>
+
+            <label for="attachmentPath">첨부파일 경로</label>
+            <input type="file" id="attachmentPath" name="attachmentPath">
+
+            <label for="referenceType" class="required">자료 등록 유형</label>
+            <select id="referenceType" name="referenceType" required>
+                <option value="동영상 파일" selected>동영상 파일</option>
+                <option value="URL">URL</option>
+            </select>
+
+            <label for="videoPath">동영상 파일 경로</label>
+            <input type="text" id="videoPath" name="videoPath" maxlength="50">
+
+            <label for="videoURL">동영상 URL</label>
+            <input type="url" id="videoURL" name="videoURL" maxlength="50">
+
+            <label for="thumbnailPath" class="required">썸네일 파일 경로</label>
+            <input type="text" id="thumbnailPath" name="thumbnailPath" maxlength="50" required>
+        </div>
+    </div>
+    <button type="submit">등록</button>
+</form>
+
+<script>
+    document.getElementById('educationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼 제출 기본 동작 막기
+
+        // 폼 데이터 객체 만들기
+        const data = {
+            eduManagerId : 1,
+            eduType: document.getElementById('eduType').value,
+            eduName: document.getElementById('eduName').value,
+            eduDescription: document.getElementById('eduDescription').value,
+            eduLocation: document.getElementById('eduLocation').value,
+            maxApplicant: parseInt(document.getElementById('maxApplicant').value, 10),
+            applyStartDate: document.getElementById('applyStartDate').value,
+            applyEndDate: document.getElementById('applyEndDate').value,
+            eduStartDate: document.getElementById('eduStartDate').value,
+            eduEndDate: document.getElementById('eduEndDate').value,
+            educatorName: document.getElementById('educatorName').value,
+            educatorContact: document.getElementById('educatorContact').value,
+            referenceType: document.getElementById('referenceType').value,
+            videoPath: document.getElementById('videoPath').value,
+            videoURL: document.getElementById('videoURL').value,
+            thumbnailPath: document.getElementById('thumbnailPath').value,
+        };
+
+        fetch('/education/enrol', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                if (!res.ok) {
+                    // 에러일 때도 JSON 메시지 받을 수 있으므로 파싱 시도
+                    return res.json().then(errData => {
+                        throw new Error(errData.message || '등록 실패');
+                    });
+                }
+                return res.json();
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(err => {
+                alert(err.message);
+            });
+    });
+</script>
+</body>
+</html>

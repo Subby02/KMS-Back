@@ -23,25 +23,26 @@ public class EducationController {
 
     @PostMapping("/enrol")
     public ResponseEntity<?> enrolEducation(@RequestBody EducationDTO dto) {
-        if (service.checkEssential(dto)) {
-            if(service.checkFormat(dto)) {
-                service.enrolEducationInfo(dto);
-
-                return ResponseEntity.ok(Map.of("message", "등록 성공"));
-            } else {
-                return ResponseEntity.badRequest().body(Map.of("message", "포맷 오류"));
-            }
-        } else {
-            return ResponseEntity.badRequest().body(Map.of("message", "필수 값 오류"));
+        if (!service.checkEssential(dto)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "필수 입력 항목이 누락되었습니다. "));
         }
+
+        if (!service.checkFormat(dto)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "입력 형식이 올바르지 않습니다."));
+        }
+
+        // 모든 검사를 통과한 경우
+        service.enrolEducationInfo(dto);
+        return ResponseEntity.ok(Map.of("message", "교육 정보가 성공적으로 등록되었습니다."));
     }
 
     @PostMapping("/search")
-    public List<EducationInfo> searchEducation(@RequestBody QueryDTO dto) {
-        if (service.checkQuery(dto)) {
-            return service.searchEducationInfo(dto);
+    public ResponseEntity<?> searchEducation(@RequestBody QueryDTO dto) {
+        if (!service.checkQuery(dto)) {
+            return ResponseEntity.badRequest().body(Map.of("message", "검색 조건이 올바르지 않습니다."));
         }
-        return List.of();
+        List<EducationInfo> results = service.searchEducationInfo(dto);
+        return ResponseEntity.ok(results);
     }
 
 }

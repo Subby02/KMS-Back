@@ -43,6 +43,18 @@ public class EducationService {
     }
 
     public boolean checkQuery(QueryDTO dto) {
+        if (dto.getApplyStartDate() != null && dto.getApplyEndDate() != null) {
+            if (dto.getApplyEndDate().before(dto.getApplyStartDate())) {
+                return false;
+            }
+        }
+
+        if (dto.getEduStartDate() != null && dto.getEduEndDate() != null) {
+            if (dto.getEduEndDate().before(dto.getEduStartDate())) {
+                return false;
+            }
+        }
+
         return true;
     }
 

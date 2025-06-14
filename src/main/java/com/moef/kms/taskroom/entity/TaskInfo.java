@@ -2,14 +2,10 @@ package com.moef.kms.taskroom.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
 @Data
 public class TaskInfo {
     @Id
@@ -20,7 +16,7 @@ public class TaskInfo {
     @Column(length = 20, nullable = false)
     private String userId;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     private String title;
 
     @Column(nullable = false)

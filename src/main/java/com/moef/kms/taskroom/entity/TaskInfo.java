@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Table(name = "task_info")
 public class TaskInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

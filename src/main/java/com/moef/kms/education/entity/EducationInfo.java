@@ -68,13 +68,13 @@ public class EducationInfo {
     @Column(length = 10, nullable = false)
     private String referenceType = "동영상 파일";
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String videoPath;
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String videoUrl;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String thumbnailPath;
 
     @ElementCollection

@@ -6,8 +6,13 @@ import com.moef.kms.education.entity.EducationInfo;
 import com.moef.kms.education.repository.EducationRepository;
 import com.moef.kms.education.specification.QuerySpecification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EducationService {
@@ -20,7 +25,18 @@ public class EducationService {
         this.repository = repository;
     }
 
-    public boolean checkEssential(EducationDTO dto) {
+    public boolean checkEssential(EducationDTO dto, MultipartFile videoFile, MultipartFile thumbnailFile) {
+        if (videoFile != null && !videoFile.isEmpty()) {
+            if (!videoFile.getContentType().startsWith("video/")) {
+                return false;
+            }
+        }
+        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+            if (!thumbnailFile.getContentType().startsWith("image/")) {
+                return false;
+            }
+        }
+
         return dto.getEduType() != null && !dto.getEduType().isEmpty()
                 && dto.getEduName() != null && !dto.getEduName().isEmpty()
                 && dto.getEduDescription() != null && !dto.getEduDescription().isEmpty()
@@ -32,8 +48,7 @@ public class EducationService {
                 && dto.getEduEndDate() != null
                 && dto.getEducatorName() != null && !dto.getEducatorName().isEmpty()
                 && dto.getEducatorContact() != null && !dto.getEducatorContact().isEmpty()
-                && dto.getReferenceType() != null && !dto.getReferenceType().isEmpty()
-                && dto.getThumbnailPath() != null && !dto.getThumbnailPath().isEmpty();
+                && dto.getReferenceType() != null && !dto.getReferenceType().isEmpty();
     }
 
     public boolean checkFormat(EducationDTO dto) {
@@ -48,17 +63,56 @@ public class EducationService {
                 return false;
             }
         }
-
         if (dto.getEduStartDate() != null && dto.getEduEndDate() != null) {
             if (dto.getEduEndDate().before(dto.getEduStartDate())) {
                 return false;
             }
         }
-
         return true;
     }
 
-    public void enrolEducationInfo(EducationDTO dto) {
+    public String saveVideo(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        }
+        String fileName = UUID.randomUUID().toString() + fileExtension;
+        String uploadDir = "/path/to/upload/videos/";
+
+        // 디렉토리가 없으면 생성 (필수)
+        Files.createDirectories(Paths.get(uploadDir));
+        Files.copy(file.getInputStream(), Paths.get(uploadDir, fileName));
+
+        String videoUrl = "http://localhost:8080/videos/" + fileName;
+        return videoUrl;
+    }
+
+    public String saveThumbnail(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        }
+        String fileName = UUID.randomUUID().toString() + fileExtension;
+        String uploadDir = "/path/to/upload/thumbnails/";
+
+        Files.createDirectories(Paths.get(uploadDir));
+        Files.copy(file.getInputStream(), Paths.get(uploadDir, fileName));
+
+        String thumbnailUrl = "http://localhost:8080/thumbnails/" + fileName;
+        return thumbnailUrl;
+    }
+
+    public void enrolEducationInfo(EducationDTO dto, MultipartFile videoFile, MultipartFile thumbnailFile) throws IOException {
         EducationInfo educationInfo = new EducationInfo();
         educationInfo.setEduManagerId(10001);
         educationInfo.setEduName(dto.getEduName());
@@ -73,9 +127,12 @@ public class EducationService {
         educationInfo.setEducatorContact(dto.getEducatorContact());
         educationInfo.setAttachmentPath(dto.getAttachmentPath());
         educationInfo.setReferenceType(dto.getReferenceType());
-        educationInfo.setVideoPath(dto.getVideoPath());
+        String videoPath = saveVideo(videoFile);
+        educationInfo.setVideoPath(videoPath);
         educationInfo.setVideoUrl(dto.getVideoUrl());
-        educationInfo.setThumbnailPath(dto.getThumbnailPath());
+        String thumbnailPath = saveThumbnail(thumbnailFile);
+        System.out.println(thumbnailPath);
+        educationInfo.setThumbnailPath(thumbnailPath);
         repository.save(educationInfo);
     }
 

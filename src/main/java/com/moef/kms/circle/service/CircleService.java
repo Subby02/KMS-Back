@@ -13,34 +13,28 @@ import java.util.List;
 
 @Service
 public class CircleService {
-
     @Autowired
-    private CircleRepository circleRepository;
+    private CircleRepository repo;
 
     public CircleResponseDto createCircle(CircleDto dto) {
-        CircleInfo circle = new CircleInfo();
-        circle.setName(dto.getName());
-        circle.setDescription(dto.getDescription());
-        circle.setCreatedAt(LocalDateTime.now());
-        circleRepository.save(circle);
-        return new CircleResponseDto(
-                circle.getCircleId(),
-                circle.getName(),
-                circle.getDescription(),
-                circle.getMembers().size(),
-                circle.getCreatedAt()
-        );
+        CircleInfo c = new CircleInfo();
+        c.setName(dto.getName());
+        c.setDescription(dto.getDescription());
+        c.setCreatedBy(dto.getCreatedBy());
+        c.setCreatedAt(LocalDateTime.now());
+        repo.save(c);
+        return new CircleResponseDto(c.getCircleId(),c.getName(),c.getDescription(),c.getCreatedBy(),c.getMembers().size(),c.getCreatedAt());
     }
 
     public List<CircleResponseDto> getPopularCircles() {
-        return circleRepository.findPopularCircles(PageRequest.of(0, 5));
+        return repo.findPopularCircles(PageRequest.of(0,5));
     }
 
     public List<CircleResponseDto> getNewCircles() {
-        return circleRepository.findNewCircles(PageRequest.of(0, 5));
+        return repo.findNewCircles(PageRequest.of(0,5));
     }
 
-    public List<CircleResponseDto> searchCircles(String query) {
-        return circleRepository.searchCircles(query);
+    public List<CircleResponseDto> searchCircles(String q) {
+        return repo.searchCircles(q);
     }
 }

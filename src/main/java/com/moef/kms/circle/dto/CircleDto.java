@@ -7,4 +7,6 @@ public class CircleDto {
     private String name;
 
     private String description;
+
+    private String createdBy;
 }

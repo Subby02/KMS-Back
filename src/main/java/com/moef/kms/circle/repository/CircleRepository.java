@@ -9,25 +9,20 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CircleRepository extends JpaRepository<CircleInfo, Long> {
-    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(" +
-            "c.circleId, c.name, c.description, COUNT(m), c.createdAt) " +
+
+    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(c.circleId,c.name,c.description,c.createdBy,COUNT(m),c.createdAt) " +
             "FROM CircleInfo c LEFT JOIN c.members m " +
-            "GROUP BY c.circleId " +
-            "ORDER BY COUNT(m) DESC")
+            "GROUP BY c.circleId ORDER BY COUNT(m) DESC")
     List<CircleResponseDto> findPopularCircles(Pageable pageable);
 
-    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(" +
-            "c.circleId, c.name, c.description, COUNT(m), c.createdAt) " +
+    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(c.circleId,c.name,c.description,c.createdBy,COUNT(m),c.createdAt) " +
             "FROM CircleInfo c LEFT JOIN c.members m " +
-            "GROUP BY c.circleId " +
-            "ORDER BY c.createdAt DESC")
+            "GROUP BY c.circleId ORDER BY c.createdAt DESC")
     List<CircleResponseDto> findNewCircles(Pageable pageable);
 
-    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(" +
-            "c.circleId, c.name, c.description, COUNT(m), c.createdAt) " +
+    @Query("SELECT new com.moef.kms.circle.dto.CircleResponseDto(c.circleId,c.name,c.description,c.createdBy,COUNT(m),c.createdAt) " +
             "FROM CircleInfo c LEFT JOIN c.members m " +
-            "WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :query, '%')) " +
-            "   OR LOWER(c.description) LIKE LOWER(CONCAT('%', :query, '%')) " +
+            "WHERE LOWER(c.name) LIKE LOWER(CONCAT('%',:q,'%')) OR LOWER(c.description) LIKE LOWER(CONCAT('%',:q,'%')) " +
             "GROUP BY c.circleId")
-    List<CircleResponseDto> searchCircles(@Param("query") String query);
+    List<CircleResponseDto> searchCircles(@Param("q") String query);
 }

@@ -12,28 +12,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/circle")
 public class CircleController {
-
     @Autowired
-    private CircleService circleService;
+    private CircleService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CircleResponseDto createCircle(@RequestBody CircleDto dto) {
-        return circleService.createCircle(dto);
+    public CircleResponseDto register(@RequestBody CircleDto dto) {
+        return service.createCircle(dto);
     }
 
     @GetMapping("/popular")
-    public List<CircleResponseDto> getPopularCircles() {
-        return circleService.getPopularCircles();
+    public List<CircleResponseDto> popular() {
+        return service.getPopularCircles();
     }
 
     @GetMapping("/new")
-    public List<CircleResponseDto> getNewCircles() {
-        return circleService.getNewCircles();
+    public List<CircleResponseDto> newest() {
+        return service.getNewCircles();
     }
 
     @GetMapping("/search")
-    public List<CircleResponseDto> searchCircles(@RequestParam("query") String query) {
-        return circleService.searchCircles(query);
+    public List<CircleResponseDto> search(@RequestParam("query") String q) {
+        return service.searchCircles(q);
     }
 }

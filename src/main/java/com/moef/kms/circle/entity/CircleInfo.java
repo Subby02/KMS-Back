@@ -25,6 +25,9 @@ public class CircleInfo {
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false, updatable = false, length = 20)
+    private String createdBy;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 

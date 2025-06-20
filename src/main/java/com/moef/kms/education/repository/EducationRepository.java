@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface EducationRepository extends JpaRepository<EducationInfo, Integer> , JpaSpecificationExecutor<EducationInfo> {
+
+    boolean existsByEduManagerId(Integer eduManagerId);
 }

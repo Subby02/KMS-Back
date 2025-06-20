@@ -60,5 +60,10 @@ public class ScheduleController {
         List<ScheduleDto> schedules = service.getSchedulesForMonth(year, month);
         return ResponseEntity.ok(schedules);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ScheduleDto>> getAllSchedules() {
+        return ResponseEntity.ok(service.getAllSchedules());
+    }
 }
 

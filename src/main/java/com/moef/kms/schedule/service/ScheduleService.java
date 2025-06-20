@@ -25,7 +25,6 @@ public class ScheduleService {
     public boolean checkEssential(ScheduleDto dto) {
         return dto.getTitle() != null && dto.getStartDateTime() != null && dto.getEndDateTime() != null;
     }
-
     // 🔹 포맷 유효성 검증
     public boolean checkFormat(ScheduleDto dto) {
         return dto.getStartDateTime().isBefore(dto.getEndDateTime());
@@ -42,6 +41,13 @@ public class ScheduleService {
         return repository.findById(id)
                 .map(this::toDto)
                 .orElse(null);
+    }
+    // ScheduleService.java
+    public List<ScheduleDto> getAllSchedules() {
+        return repository.findAll()
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     // 🔹 월간 일정 조회 (달력)

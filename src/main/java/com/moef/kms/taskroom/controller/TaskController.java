@@ -17,7 +17,19 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<Void> createTask(@RequestBody TaskDto taskDto) {
+    public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto) {
+        // userId 고정
+        taskDto.setUserId("T001");
+
+        // 유효성 검사
+        if (taskDto.getTitle() == null || taskDto.getTitle().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("제목(title)은 필수 입력입니다.");
+        }
+
+        if (taskDto.getStartDate() == null) {
+            return ResponseEntity.badRequest().body("시작일(startDate)은 필수 입력입니다.");
+        }
+
         taskService.createTask(taskDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -28,7 +40,6 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    // TaskId로 수정하기 (PUT)
     @PutMapping("/{taskId}")
     public ResponseEntity<Void> updateTask(@PathVariable Long taskId, @RequestBody TaskDto taskDto) {
         boolean updated = taskService.updateTask(taskId, taskDto);
@@ -39,12 +50,11 @@ public class TaskController {
         }
     }
 
-    // TaskId로 삭제하기 (DELETE)
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
         boolean deleted = taskService.deleteTask(taskId);
         if (deleted) {
-            return ResponseEntity.noContent().build(); // 삭제 성공 시 204 반환
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }

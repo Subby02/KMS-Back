@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000") // 👈 이 줄 추가
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -18,10 +19,8 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto) {
-        // userId 고정
         taskDto.setUserId("T001");
 
-        // 유효성 검사
         if (taskDto.getTitle() == null || taskDto.getTitle().trim().isEmpty()) {
             return ResponseEntity.badRequest().body("제목(title)은 필수 입력입니다.");
         }

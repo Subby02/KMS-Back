@@ -1,7 +1,7 @@
 package com.moef.kms.stdClub.service;
 
 import com.moef.kms.education.repository.EducationRepository;
-import com.moef.kms.employee.info.EmployeeInfo;
+import com.moef.kms.employee.entity.EmployeeEntity;
 import com.moef.kms.stdClub.dto.StdClubCreateDto;
 import com.moef.kms.stdClub.dto.StdClubResponseDto;
 import com.moef.kms.stdClub.entity.StdClubInfo;
@@ -36,7 +36,7 @@ public class StdClubService {
             throw new IllegalArgumentException("이미 존재하는 동아리 이름입니다: " + createDto.getStdClubName());
         }
         // 직원 이름으로 empId 조회
-        EmployeeInfo manager = employeeRepository.findByName(createDto.getStdClubManagerName())
+        EmployeeEntity manager = employeeRepository.findByName(createDto.getStdClubManagerName())
                 .orElseThrow(() -> new IllegalArgumentException("해당 이름의 직원이 존재하지 않습니다: " + createDto.getStdClubManagerName()));
 
 
@@ -75,8 +75,8 @@ public class StdClubService {
 
 
     private StdClubResponseDto convertToResponseDto(StdClubInfo entity) {
-        Optional<EmployeeInfo> employeeOpt = employeeRepository.findById(entity.getStdClubManagerId());
-        String name = employeeOpt.map(EmployeeInfo::getName).orElse("이름 없음");
+        Optional<EmployeeEntity> employeeOpt = employeeRepository.findById(entity.getStdClubManagerId());
+        String name = employeeOpt.map(EmployeeEntity::getName).orElse("이름 없음");
 
         return new StdClubResponseDto(
                 entity.getStdClubId(),

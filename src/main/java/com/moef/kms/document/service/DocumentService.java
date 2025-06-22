@@ -2,7 +2,7 @@ package com.moef.kms.document.service;
 
 import com.moef.kms.document.entity.DocumentInfo;
 import com.moef.kms.document.repository.DocumentRepository;
-import com.moef.kms.document.upload.FileUpload;
+import com.moef.kms.document.service.FileUpload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

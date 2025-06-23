@@ -19,8 +19,8 @@ public class EducationInfo {
     @Column(length = 5)
     private int eduId;
 
-    @Column(length = 5, nullable = false)
-    private int eduManagerId;
+    @Column(nullable = false)
+    private String eduManagerId;
 
     @Column(length = 10, nullable = false)
     private String eduType = "오프라인";

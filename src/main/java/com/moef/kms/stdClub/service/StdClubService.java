@@ -27,7 +27,6 @@ public class StdClubService {
 
     private final StdClubRepository stdClubRepository;
     private final EmployeeRepository employeeRepository;
-    private final EducationRepository educationRepository;
 
     @Transactional
     public void createStdClub(StdClubCreateDto createDto) {
@@ -90,11 +89,10 @@ public class StdClubService {
         if (userId == null ) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
-        boolean EduManager = educationRepository.existsByEduManagerId(Integer.valueOf(userId.replaceAll("[^0-9]", "")));
+        boolean EduManager = employeeRepository.existsByEmpId(userId);
 
         boolean isStdClubManager = stdClubRepository.existsByStdClubManagerId(userId);
         if (!(isStdClubManager||EduManager)) {
-
             throw new AccessDeniedException("권한이 없습니다: 관리자가 아닙니다.");
         }
 

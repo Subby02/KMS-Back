@@ -49,6 +49,10 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
+    public static String getLoginEmployeeId(){
+        return "E001";
+    }
+
     // Entity → DTO 변환
     private EmployeeDto convertToDto(EmployeeEntity entity) {
         EmployeeDto dto = new EmployeeDto();

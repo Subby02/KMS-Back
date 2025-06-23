@@ -21,6 +21,8 @@ public class EmployeeEntity {
 
     private String name;
 
+    private String pw;
+
     private String dept;
 
     private String phone;

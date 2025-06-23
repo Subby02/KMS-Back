@@ -3,6 +3,7 @@ package com.moef.kms.circle.controller;
 import com.moef.kms.circle.dto.CircleDto;
 import com.moef.kms.circle.dto.CircleResponseDto;
 import com.moef.kms.circle.service.CircleService;
+import com.moef.kms.employee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,12 @@ import java.util.List;
 public class CircleController {
     @Autowired
     private CircleService service;
+    private EmployeeService employeeService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CircleResponseDto register(@RequestBody CircleDto dto) {
+        dto.setCreatedBy(employeeService.getLoginEmployeeId());
         return service.createCircle(dto);
     }
 

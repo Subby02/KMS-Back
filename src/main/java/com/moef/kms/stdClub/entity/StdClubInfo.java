@@ -12,7 +12,7 @@ import lombok.ToString;
 public class StdClubInfo {
 
     @Id
-    @Column(length = 8, nullable = false)
+    @Column(length = 8)
     private String stdClubId;
 
     @Column(length = 20, nullable = false)

@@ -5,6 +5,7 @@ import com.moef.kms.education.dto.QueryDTO;
 import com.moef.kms.education.entity.EducationInfo;
 import com.moef.kms.education.repository.EducationRepository;
 import com.moef.kms.education.specification.QuerySpecification;
+import com.moef.kms.employee.service.EmployeeService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,6 @@ import java.util.UUID;
 public class EducationService {
 
     private final EducationRepository repository;
-//    private final QEducationInfo educationInfo = QEducationInfo.educationInfo;
 
 
     public EducationService(EducationRepository repository) {
@@ -114,7 +114,7 @@ public class EducationService {
 
     public void enrolEducationInfo(EducationDTO dto, MultipartFile videoFile, MultipartFile thumbnailFile) throws IOException {
         EducationInfo educationInfo = new EducationInfo();
-        educationInfo.setEduManagerId(10001);
+        educationInfo.setEduManagerId(EmployeeService.getLoginEmployeeId());
         educationInfo.setEduName(dto.getEduName());
         educationInfo.setEduDescription(dto.getEduDescription());
         educationInfo.setEduLocation(dto.getEduLocation());

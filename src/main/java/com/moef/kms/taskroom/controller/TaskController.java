@@ -1,5 +1,6 @@
 package com.moef.kms.taskroom.controller;
 
+import com.moef.kms.employee.service.EmployeeService;
 import com.moef.kms.taskroom.dto.TaskDto;
 import com.moef.kms.taskroom.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto) {
-        taskDto.setUserId("T001");
+        taskDto.setUserId(EmployeeService.getLoginEmployeeId());
 
         if (taskDto.getTitle() == null || taskDto.getTitle().trim().isEmpty()) {
             return ResponseEntity.badRequest().body("제목(title)은 필수 입력입니다.");

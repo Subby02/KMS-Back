@@ -25,7 +25,7 @@ public class StdClubController {
     /**
      * 학습동아리 등록
      */
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Void> registerStdClub(@Valid @RequestBody StdClubCreateDto createDto) {
         try {
             stdClubService.createStdClub(createDto);
@@ -39,7 +39,7 @@ public class StdClubController {
     /**
      * 모든 학습동아리 조회
      */
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> searchStdClubs() {
 //userId 하드코딩
         String userId = "E001";
